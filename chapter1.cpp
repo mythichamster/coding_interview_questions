@@ -38,6 +38,22 @@ void problem1_1()
     std::cout << allUniqueCharactersSort("hello world") << std::endl;
 }
 
+bool checkPermutation(std::string s1, std::string s2)
+{
+    std::sort(s1.begin(), s1.end());
+    std::sort(s2.begin(), s2.end());
+    
+    return s1 == s2;
+}
+
+void problem1_2()
+{
+    // Hashmap version
+    std::cout << std::boolalpha;
+    std::cout << checkPermutation("hello", "lleho") << std::endl;
+    std::cout << checkPermutation("hello", "hell") << std::endl;
+}
+
 int main()
 {
 
