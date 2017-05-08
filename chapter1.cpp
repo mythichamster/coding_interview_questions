@@ -54,6 +54,34 @@ void problem1_2()
     std::cout << checkPermutation("hello", "hell") << std::endl;
 }
 
+void urlify(std::string& a_str, int a_len)
+{
+    int copyFrom = a_len - 1;
+    int copyTo = a_str.length() - 1;
+    
+    while(copyFrom >= 0 && copyTo >= 0)
+    {
+        if (a_str[copyFrom] == ' ')
+        {
+            a_str[copyTo--] = '0';
+            a_str[copyTo--] = '2';
+            a_str[copyTo--] = '%';
+        }
+        else
+        {
+            a_str[copyTo--] = a_str[copyFrom];
+        }
+        copyFrom--;
+    }
+}
+
+void problem1_3()
+{
+    std::string str = "Mr John Smith    ";
+    urlify(str, 13);
+    std::cout << str << std::endl;
+}
+
 int main()
 {
 
