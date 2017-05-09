@@ -249,7 +249,7 @@ void problem1_6()
 }
 
 // *****************************
-// 1.6 Matrix rotation
+// 1.7 Matrix rotation
 // *****************************
 
 // On 90 degree rotation, 
@@ -315,6 +315,80 @@ void problem1_7()
     printMatrix(m, N);
     
     // Cleanup memory
+    for (int i = 0; i < N; ++i)
+    {
+        delete[] m[i];
+    }
+    delete[] m;
+}
+
+// *****************************
+// 1.8 Matrix rotation
+// *****************************
+
+static const int N = 5;
+
+void zero(int** m)
+{
+    std::bitset<N> rowContainsZero;
+    std::bitset<N> colContainsZero;
+    
+    for(int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < N; ++j)
+        {
+            if (m[i][j] == 0)
+            {
+                rowContainsZero.set(i);
+                colContainsZero.set(j);
+            }
+        }
+    }
+    
+    for(int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < N; ++j)
+        {
+            if (rowContainsZero[i] | colContainsZero[j])
+            {
+                m[i][j] = 0;
+            }
+        }
+    }
+}
+
+void printMatrix(int** m)
+{
+    for (int i = 0; i < N; i++) 
+    {
+        for (int j = 0; j < N; j++) 
+        {
+            std::cout << m[i][j] << ",";
+        }
+        std::cout << std::endl;
+    }
+            
+}
+
+void problem1_8()
+{
+    int **m;
+    m = new int*[N];
+    for (int i = 0; i < N; ++i)
+    {
+        m[i] = new int[N];
+        for (int j = 0; j < N; ++j)
+        {
+            m[i][j] = 10 * (i + 1) + (j + 1);
+        }
+    }
+    m[2][3] = 0;
+    
+    printMatrix(m);
+    zero(m);
+    std::cout << "Zeroed:" << std::endl;
+    printMatrix(m);
+
     for (int i = 0; i < N; ++i)
     {
         delete[] m[i];
