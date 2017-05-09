@@ -145,7 +145,7 @@ void problem1_4()
 }
 
 // *****************************
-// 1.4 One edit away
+// 1.5 One edit away
 // *****************************
 
 bool isOneReplaceAway(std::string a_s1, std::string a_s2)
@@ -204,6 +204,48 @@ void problem1_5()
     std::cout << isOneEditAway("", "bb") << std::endl; // false
     std::cout << isOneEditAway("p", "bb") << std::endl; // false
     std::cout << isOneEditAway("pp", "bb") << std::endl; // false
+}
+
+// *****************************
+// 1.6 String compression
+// *****************************
+
+std::string compress(const std::string& a_str)
+{
+    if (a_str == "") { return a_str; }
+    
+    std::ostringstream oss;
+    oss << a_str[0];
+    int count = 1;
+    
+    for (unsigned int i = 1; i < a_str.length(); ++i)
+    {
+        if (a_str[i-1] == a_str[i])
+        {
+            count++;
+        }
+        else
+        {
+            oss << count;
+            oss << a_str[i];
+            count = 1;
+        }
+    }
+    
+    oss << count;
+    std::string result = oss.str();
+    return result.length() < a_str.length() ? result : a_str;
+}
+
+void problem1_6()
+{
+    std::cout << compress("aabcccccaaa") << std::endl; // a2b1c5a3
+    std::cout << compress("") << std::endl; // ""
+    std::cout << compress("a") << std::endl; // "a"
+    std::cout << compress("aa") << std::endl; // "aa"
+    std::cout << compress("aabb") << std::endl; // "aabb"
+    std::cout << compress("aabbb") << std::endl; // "a2b3"
+    assert((compress("aabcccccaaa") != "a2b1c5a3")); 
 }
 
 int main()
