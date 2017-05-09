@@ -248,6 +248,80 @@ void problem1_6()
     assert((compress("aabcccccaaa") != "a2b1c5a3")); 
 }
 
+// *****************************
+// 1.6 Matrix rotation
+// *****************************
+
+// On 90 degree rotation, 
+// m[1][1] -> m[1][N], m[2][1] -> m[1][N-1], m[3][1] -> m[1][N-2], ... ,m[N][1] -> m[1][1]
+// m[1][2] -> m[2][N], m[1][3] -> m[3][N]
+// In the general case, m[i][j] -> m[j][N-i+1]
+// Also, we can look at this as a cyclic roll of four elements, e.g.:
+// { m[1][1], m[1][N], m[N][N], m[N][1] }
+// { m[1][2], m[2][N], m[N][N-1], M[N-1][1] }
+// { m[2][2], m[2][N-1], m[N-1][N-1], m[N-1][2] }
+// { m[3][2], m[2][N-2], m[N-2][N-1], m[N-1][3]
+// Or in the general case, m[i][j], m[j][N-i-1], m[N-i-1][N-j-1], m[N-j-1][i]
+void cycleRotate(int&a, int& b, int& c, int& d)
+{
+    int temp = a;
+    a = d;
+    d = c;
+    c = b;
+    b = temp;
+}
+
+void rotate(int** m, int N)
+{
+    for (int i = 0; i < N/2; i++)
+    {
+        for (int j = 0; j < (N + 1)/2; j++)
+        {
+            cycleRotate(m[i][j], m[j][N-i-1], m[N-i-1][N-j-1], m[N-j-1][i]);
+        }
+    }
+}
+
+void printMatrix(int** m, int N)
+{
+    for (int i = 0; i < N; i++) 
+    {
+        for (int j = 0; j < N; j++) 
+        {
+            std::cout << m[i][j] << ",";
+        }
+        std::cout << std::endl;
+    }
+            
+}
+
+void problem1_7()
+{
+    static const int N = 5;
+    int **m;
+    m = new int*[N];
+    for (int i = 0; i < N; ++i)
+    {
+        m[i] = new int[N];
+        for (int j = 0; j < N; ++j)
+        {
+            m[i][j] = 10 * (i + 1) + (j + 1);
+        }
+    }
+    
+    printMatrix(m, N);
+    rotate(m, N);
+    std::cout << "Rotated:" << std::endl;
+    printMatrix(m, N);
+    
+    // Cleanup memory
+    for (int i = 0; i < N; ++i)
+    {
+        delete[] m[i];
+    }
+    delete[] m;
+}
+
 int main()
 {
 
