@@ -71,3 +71,48 @@ void problem2_4()
     list = Node<int>::partition(list, 5);
     list->print();
 }
+
+// **************
+// 2.5 Add Lists
+// **************
+
+template<typename T>
+Node<T> *add(Node<T> *l1, Node<T>* l2, T carry)
+{
+    if (!l1 && !l2 && carry == 0) { return nullptr; }
+
+    T value = carry;
+    if (l1) { value += l1->m_data; }
+    if (l2) { value += l2->m_data; }
+    
+    auto result = new Node<T>(value % 10);
+    carry = value / 10;
+    
+    if (l1 || l2)
+    {
+        result->m_next = add(l1 ? l1->m_next : nullptr, 
+                             l2 ? l2->m_next : nullptr, 
+                             carry);
+    }
+    
+    return result;
+}
+
+void problem2_5()
+{
+    auto l1 = Node<int>::listFromVector({7, 1, 6});
+    auto l2 = Node<int>::listFromVector({5, 9, 2});
+    auto sum = add<int>(l1, l2, 0);
+    sum->print();
+    
+    
+    l1 = Node<int>::listFromVector({9, 9, 9});
+    l2 = Node<int>::listFromVector({1});
+    sum = add<int>(l1, l2, 0);
+    sum->print();
+}
+
+// *************
+// 2.6 Palidrome
+// *************
+
