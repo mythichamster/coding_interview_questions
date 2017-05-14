@@ -116,3 +116,34 @@ void problem2_5()
 // 2.6 Palidrome
 // *************
 
+template<typename T>
+bool isPalindrome(Node<T> *list)
+{
+    std::stack<T> s;
+    auto curr = list;
+    while (curr)
+    {
+        s.emplace(curr->m_data);
+        curr = curr->m_next;
+    }
+    
+    while (!s.empty())
+    {
+        if (s.top() != list->m_data) { return false; }
+        list = list->m_next;
+        s.pop();
+    }
+    
+    return true;
+}
+
+void problem2_6()
+{
+    std::cout << std::boolalpha;
+    Node<int> *list;
+    list = Node<int>::listFromVector({7, 1, 6});
+    std::cout << isPalindrome(list) << std::endl;
+    
+    list = Node<int>::listFromVector({7, 1, 6, 1, 7});
+    std::cout << isPalindrome(list) << std::endl;
+}
