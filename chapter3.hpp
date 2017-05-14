@@ -1,5 +1,5 @@
 // ****************
-// 3.1 Stack Min
+// 3.2 Stack Min
 // ****************
 
 template<typename T>
@@ -104,4 +104,76 @@ void problem3_2()
         stack->print();
         stack->pop();
     }
+}
+
+// *******************
+// 3.4 Two Stack Queue
+// *******************
+
+template<typename T>
+struct SQueue
+{
+    static SQueue<T> *fromVector(const std::vector<T>& v)
+    {
+        auto q = new SQueue<T>;
+        q->m_entryStack = Stack<T>::fromVector(v);
+        q->m_exitStack = new Stack<T>;
+        return q;
+    }
+    
+    void drain()
+    {
+        while(!m_entryStack->empty())
+        {
+            m_exitStack->push(m_entryStack->top());
+            m_entryStack->pop();
+        }
+    }
+    
+    void push(T data)
+    {
+        m_entryStack->push(data);
+    }
+    
+    void pop()
+    {
+        if (m_exitStack->empty()) { drain(); }
+        m_exitStack->pop();
+    }
+    
+    T top()
+    {
+        if (m_exitStack->empty()) { drain(); }
+        return m_exitStack->top();
+    }
+    
+    bool empty()
+    {
+        return m_entryStack->empty() && m_exitStack->empty();
+    }
+    
+    void print()
+    {
+        drain();
+        m_exitStack->print();
+    }
+    
+    Stack<T> *m_entryStack = nullptr;
+    Stack<T> *m_exitStack = nullptr;
+};
+
+void problem3_4()
+{
+    
+    auto q = SQueue<int>::fromVector({1, 2, 3});
+    std:: cout << q->top() << std::endl; // Should be 1
+    q->push(4);
+    std::cout << q->top() << std::endl; // Should be 1
+    while (!q->empty())
+    {
+        std::cout << q->top() << " ";
+        q->pop();
+    }
+    std::cout << std::endl;
+
 }
