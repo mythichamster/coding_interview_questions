@@ -177,3 +177,113 @@ void problem3_4()
     std::cout << std::endl;
 
 }
+
+// ******************
+// 3.6 Animal Shelter
+// ******************
+template<typename T>
+struct Queue
+{
+    ~Queue() 
+    {
+        while (!empty())
+        {
+            pop();
+        }
+    }
+    
+    void push(T elem) 
+    {
+        Node<T> *n = new Node<T>(elem);
+        if (!m_head) 
+        {
+            m_head = n;
+        }
+        else 
+        {
+            m_tail->m_next = n;
+        }
+        m_tail = n;
+    }
+    
+    T pop()
+    {
+        T result = m_head->m_data;
+        Node<T> *temp = m_head;
+        if (m_tail == m_head) m_tail = nullptr;
+        m_head = m_head->m_next;
+        delete temp;
+        return result;
+    }
+    
+    T top() const
+    {
+        return m_head->m_data;
+    }
+    
+    bool empty() const
+    {
+        return (m_head == nullptr);
+    }
+    
+    Node<T> *m_head = nullptr;
+    Node<T> *m_tail = nullptr;
+};
+
+struct Animal
+{
+    explicit Animal(std::string a_name) : m_name(a_name), m_order(0) {}
+    
+    std::string m_name;
+    int m_order;
+};
+
+struct Dog : public Animal { Dog(std::string a_name) : Animal(a_name) {} };
+struct Cat : public Animal { Cat(std::string a_name) : Animal(a_name) {} };
+
+struct AnimalShelter
+{
+    void enqueue(Dog *d) { d->m_order = m_order++; m_dogs.push(d); }
+    void enqueue(Cat *c) { c->m_order = m_order++; m_cats.push(c); }
+    Dog *dequeueDog() { return m_dogs.pop(); }
+    Cat *dequeueCat() { return m_cats.pop(); }
+    Animal *dequeueAny() 
+    {
+        if (m_dogs.empty()) return m_cats.pop();
+        if (m_cats.empty()) return m_dogs.pop();
+        
+        Animal *d = m_dogs.top();
+        Animal *c = m_cats.top();
+        if (d->m_order < c->m_order) 
+        {
+            return m_dogs.pop();
+        }
+        else
+        {
+            return m_cats.pop();
+        }
+    }
+    
+    Queue<Dog *> m_dogs;
+    Queue<Cat *> m_cats;
+    int m_order = 0;
+};
+
+void problem3_6()
+{
+    Dog d1("Fido"), d2("Gido"), d3("Hido");
+    Cat c1("Barry"), c2("Carry");
+    AnimalShelter as;
+    as.enqueue(&d1);
+    as.enqueue(&c1);
+    as.enqueue(&d2);
+    as.enqueue(&d3);
+    as.enqueue(&c2);
+    
+    std::cout << as.dequeueAny()->m_name << std::endl; // Fido
+    std::cout << as.dequeueDog()->m_name << std::endl; // Gido
+    std::cout << as.dequeueAny()->m_name << std::endl; // Barry
+    std::cout << as.dequeueCat()->m_name << std::endl; // Carry
+    std::cout << as.dequeueAny()->m_name << std::endl; // Hido
+
+}
